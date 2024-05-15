@@ -1,5 +1,8 @@
 ---
+import { loadPhotos } from "../lib";
 
+const photos = await loadPhotos();
+console.log(photos);
 ---
 
 <html lang="en">
@@ -9,5 +12,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>Photo of the Day - Ben Borgers</title>
   </head>
-  <body> </body>
+  <body>
+    <pre>{JSON.stringify(photos, null, 2)}</pre>
+  </body>
 </html>
