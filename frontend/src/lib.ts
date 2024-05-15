@@ -24,9 +24,12 @@ export const loadPhotos = async (origin: string): Promise<Photo[]> => {
     });
   }
 
-  // const res = await fetch(`${API_ORIGIN}/api/photos`);
-  // const json = await res.json();
-  // photos.push(...json.photos);
+  // Disable API loading in dev because it's a bit slow.
+  if (!import.meta.env.DEV) {
+    const res = await fetch(`${API_ORIGIN}/api/photos`);
+    const json = await res.json();
+    photos.push(...json.photos);
+  }
 
   return photos.sort((a, b) => (a.date > b.date ? 1 : -1));
 };
