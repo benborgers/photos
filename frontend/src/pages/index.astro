@@ -31,7 +31,9 @@ const months = monthRange(photos).reverse();
       <div class="mt-7 mx-auto max-w-xl space-y-6">
         {
           months.map(([year, month]) => (
-            <Month year={year} month={month} photos={photos} />
+            <div>
+              <Month year={year} month={month} photos={photos} client:load />
+            </div>
           ))
         }
       </div>
