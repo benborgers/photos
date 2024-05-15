@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Description, Dialog, DialogPanel } from "@headlessui/react";
-import type { Photo } from "../lib";
+import type { Photo } from "../lib/types";
 
 export default function Lightbox({
   photo,

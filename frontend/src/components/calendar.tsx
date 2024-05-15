@@ -18,7 +18,8 @@ export default function Calendar({ photos }: { photos: Photo[] }) {
             year={year}
             month={month}
             photos={photos}
-            onPhotoClick={setLightboxPhoto}
+            // onPhotoClick={setLightboxPhoto}
+            onPhotoClick={(photo) => window.open(photo.url, "_blank")}
           />
         ))}
       </div>
