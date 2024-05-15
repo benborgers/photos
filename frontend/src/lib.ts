@@ -11,7 +11,7 @@ export type Photo = {
   url: string;
 };
 
-export const loadPhotos = async (): Promise<Photo[]> => {
+export const loadPhotos = async (origin: string): Promise<Photo[]> => {
   const photos: Photo[] = [];
 
   for (const folder of await fs.readdir("legacy")) {
@@ -20,7 +20,7 @@ export const loadPhotos = async (): Promise<Photo[]> => {
     photos.push({
       date: data.date,
       caption: "caption" in data ? data.caption.trim() : null,
-      url: data.photo,
+      url: origin + data.photo,
     });
   }
 

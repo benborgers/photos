@@ -2,7 +2,7 @@
 import Month from "../components/month";
 import { loadPhotos, monthRange } from "../lib";
 
-const photos = await loadPhotos();
+const photos = await loadPhotos(Astro.site!.origin);
 const months = monthRange(photos).reverse();
 ---
 
@@ -15,15 +15,15 @@ const months = monthRange(photos).reverse();
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   </head>
   <body class="antialiased bg-gray-900">
-    <div class="px-4 pt-16 pb-24">
+    <div class="px-3 pt-8 sm:pt-16 pb-24">
       <div class="mx-auto max-w-xl flex items-end justify-between">
         <h1
-          class="text-lg text-white font-display font-bold bg-rose-600 px-2 rounded-md"
+          class="sm:text-lg text-white font-display font-bold bg-rose-600 px-2 rounded-md"
         >
           Photo of the Day
         </h1>
         <p
-          class="text-lg text-gray-500 font-display font-medium underline decoration-gray-700 hover:text-white hover:decoration-white transition-colors"
+          class="sm:text-lg text-gray-500 font-display font-medium underline decoration-gray-700 hover:text-white hover:decoration-white transition-colors"
         >
           <a href="https://ben.page" target="_blank">Ben Borgers</a>
         </p>
