@@ -1,18 +1,40 @@
 ---
-import { loadPhotos } from "../lib";
+import Month from "../components/month";
+import { loadPhotos, monthRange } from "../lib";
 
 const photos = await loadPhotos();
-console.log(photos);
+const months = monthRange(photos).reverse();
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="https://emojicdn.elk.sh/🐙" />
     <meta name="viewport" content="width=device-width" />
     <title>Photo of the Day - Ben Borgers</title>
+    <link rel="icon" href="https://emojicdn.elk.sh/🐙" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
   </head>
-  <body>
-    <pre>{JSON.stringify(photos, null, 2)}</pre>
+  <body class="antialiased bg-gray-900">
+    <div class="px-4 pt-16 pb-24">
+      <div class="mx-auto max-w-xl flex items-end justify-between">
+        <h1
+          class="text-lg text-white font-display font-bold bg-rose-600 px-2 rounded-md"
+        >
+          Photo of the Day
+        </h1>
+        <p
+          class="text-lg text-gray-500 font-display font-medium underline decoration-gray-700 hover:text-white hover:decoration-white transition-colors"
+        >
+          <a href="https://ben.page" target="_blank">Ben Borgers</a>
+        </p>
+      </div>
+      <div class="mt-7 mx-auto max-w-xl space-y-6">
+        {
+          months.map(([year, month]) => (
+            <Month year={year} month={month} photos={photos} />
+          ))
+        }
+      </div>
+    </div>
   </body>
 </html>

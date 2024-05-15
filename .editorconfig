@@ -8,7 +8,7 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{json,ts,tsx,astro}]
+[*.{json,ts,tsx,mjs,astro}]
 indent_size = 2
 
 [*.md]

@@ -5,7 +5,7 @@ const API_ORIGIN = import.meta.env.DEV
   ? "http://photos.test"
   : "https://api.photos.ben.page";
 
-type Photo = {
+export type Photo = {
   date: string;
   caption: string;
   url: string;
@@ -24,9 +24,22 @@ export const loadPhotos = async (): Promise<Photo[]> => {
     });
   }
 
-  const res = await fetch(`${API_ORIGIN}/api/photos`);
-  const json = await res.json();
-  photos.push(...json.photos);
+  // const res = await fetch(`${API_ORIGIN}/api/photos`);
+  // const json = await res.json();
+  // photos.push(...json.photos);
 
-  return photos;
+  return photos.sort((a, b) => (a.date > b.date ? 1 : -1));
+};
+
+export const monthRange = (photos: Photo[]): [number, number][] => {
+  const set = new Set<string>();
+
+  for (const photo of photos) {
+    const [year, month] = photo.date.split("-").map(Number);
+    set.add(`${year}-${month}`);
+  }
+
+  return Array.from(set).map(
+    (month) => month.split("-").map(Number) as [number, number]
+  );
 };
