@@ -6,7 +6,7 @@ export default function Lightbox({
   photo,
   setPhoto,
 }: {
-  photo: Photo;
+  photo: Photo | null;
   setPhoto: React.Dispatch<React.SetStateAction<Photo | null>>;
 }) {
   const onClose = () => setPhoto(null);
