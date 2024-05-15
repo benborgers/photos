@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Photo } from "../lib";
+import type { Photo } from "../lib/types";
 import { twMerge } from "tailwind-merge";
 
 const MONTH_NAMES = [
@@ -26,10 +26,12 @@ export default function Month({
   year,
   month,
   photos,
+  onPhotoClick,
 }: {
   year: number;
   month: number;
   photos: Photo[];
+  onPhotoClick: (photo: Photo) => void;
 }) {
   const days = [];
   for (let i = 1; i <= daysInMonth(year, month); i++) {
@@ -52,29 +54,43 @@ export default function Month({
             <div key={i} />
           ))}
 
-        {days.map((day) => (
-          <Day key={day} day={day} month={month} year={year} photos={photos} />
-        ))}
+        {days.map((day) => {
+          const photo = photos.find(
+            (p) => p.date === `${year}-${pad(month)}-${pad(day)}`
+          );
+          return (
+            <Day
+              key={day}
+              year={year}
+              month={month}
+              day={day}
+              photo={photo}
+              onClick={() => {
+                if (photo) {
+                  onPhotoClick(photo);
+                }
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
 
 const Day = ({
-  day,
-  month,
   year,
-  photos,
+  month,
+  day,
+  photo,
+  onClick,
 }: {
-  day: number;
-  month: number;
   year: number;
-  photos: Photo[];
+  month: number;
+  day: number;
+  photo?: Photo;
+  onClick: () => void;
 }) => {
-  const photo = photos.find(
-    (p) => p.date === `${year}-${pad(month)}-${pad(day)}`
-  );
-
   const [isToday, setIsToday] = useState(false);
 
   useEffect(() => {
@@ -100,6 +116,8 @@ const Day = ({
             photo.url
           )}&w=200&h=200&fit=cover&output=webp`}
           loading="lazy"
+          className="cursor-zoom-in"
+          onClick={onClick}
         />
       )}
     </div>

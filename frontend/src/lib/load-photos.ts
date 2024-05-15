@@ -1,15 +1,7 @@
 import { promises as fs } from "fs";
 import { parse as parseYaml } from "yaml";
-
-const API_ORIGIN = import.meta.env.DEV
-  ? "http://photos.test"
-  : "https://api.photos.ben.page";
-
-export type Photo = {
-  date: string;
-  caption: string;
-  url: string;
-};
+import { API_ORIGIN } from "./constants";
+import type { Photo } from "./types";
 
 export const loadPhotos = async (origin: string): Promise<Photo[]> => {
   const photos: Photo[] = [];
@@ -32,17 +24,4 @@ export const loadPhotos = async (origin: string): Promise<Photo[]> => {
   }
 
   return photos.sort((a, b) => (a.date > b.date ? 1 : -1));
-};
-
-export const monthRange = (photos: Photo[]): [number, number][] => {
-  const set = new Set<string>();
-
-  for (const photo of photos) {
-    const [year, month] = photo.date.split("-").map(Number);
-    set.add(`${year}-${month}`);
-  }
-
-  return Array.from(set).map(
-    (month) => month.split("-").map(Number) as [number, number]
-  );
 };

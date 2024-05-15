@@ -1,9 +1,8 @@
 ---
-import Month from "../components/month";
-import { loadPhotos, monthRange } from "../lib";
+import Calendar from "../components/calendar";
+import { loadPhotos } from "../lib/load-photos";
 
 const photos = await loadPhotos(Astro.site!.origin);
-const months = monthRange(photos).reverse();
 ---
 
 <html lang="en">
@@ -32,14 +31,8 @@ const months = monthRange(photos).reverse();
           </a>
         </p>
       </div>
-      <div class="mt-7 mx-auto max-w-xl space-y-6">
-        {
-          months.map(([year, month]) => (
-            <div>
-              <Month year={year} month={month} photos={photos} client:load />
-            </div>
-          ))
-        }
+      <div class="mt-7 mx-auto max-w-xl">
+        <Calendar photos={photos} client:load />
       </div>
     </div>
   </body>
