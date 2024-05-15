@@ -28,8 +28,13 @@ class GetPhotos extends Controller
 
             $id = $photo['photoGuid'];
 
-            $date = str($photo['caption'])->before(':')->trim();
-            $caption = str($photo['caption'])->after(':')->trim();
+            if (str($photo['caption'])->contains(':')) {
+                $date = str($photo['caption'])->before(':')->trim();
+                $caption = str($photo['caption'])->after(':')->trim();
+            } else {
+                $date = $photo['caption'];
+                $caption = null;
+            }
 
             $icloudUrl = 'https://'.$asset['url_location'].$asset['url_path'];
 
