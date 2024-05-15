@@ -36,6 +36,8 @@ export default function Month({
     days.push(i);
   }
 
+  const offset = new Date(year, month - 1, 1).getDay();
+
   return (
     <div className="rounded-xl overflow-hidden">
       <div className="bg-gray-700/70 px-3 py-2">
@@ -44,6 +46,12 @@ export default function Month({
         </h2>
       </div>
       <div className="bg-gray-800 p-1.5 sm:p-3 grid grid-cols-7 gap-1.5 sm:gap-3">
+        {Array.from({ length: offset - 1 })
+          .fill(null)
+          .map((_, i) => (
+            <div key={i} />
+          ))}
+
         {days.map((day) => (
           <Day key={day} day={day} month={month} year={year} photos={photos} />
         ))}
