@@ -13,12 +13,16 @@ export default function Lightbox({
 
   return (
     <Dialog open={photo !== null} onClose={onClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 bg-black/80" aria-hidden="true" />
 
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel>
+      <div className="fixed inset-0 flex w-screen items-center justify-center">
+        <DialogPanel className="p-4">
           {photo?.caption && <Description>{photo?.caption}</Description>}
-          <img src={photo?.url} alt="" />
+          <img
+            src={photo?.url}
+            alt=""
+            className="max-h-full max-w-full object-cover"
+          />
           <button onClick={onClose}>&cross;</button>
         </DialogPanel>
       </div>
