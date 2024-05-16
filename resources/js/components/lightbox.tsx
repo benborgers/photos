@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { Description, Dialog, DialogPanel } from "@headlessui/react";
-import { twMerge } from "tailwind-merge";
-import { tinykeys } from "tinykeys";
 import type { Photo } from "../lib/types";
 
 export default function Lightbox({
@@ -18,18 +16,23 @@ export default function Lightbox({
   const onClose = () => setPhoto(null);
 
   useEffect(() => {
-    const unsubscribe = tinykeys(window, {
-      ArrowRight: () => {
-        if (!photo) return;
-        onNext();
-      },
-      ArrowLeft: () => {
-        if (!photo) return;
-        onPrevious();
-      },
-    });
+    const listener = (e: KeyboardEvent) => {
+      if (!photo) {
+        return;
+      }
 
-    return unsubscribe;
+      if (e.key === "ArrowRight") {
+        onNext();
+      }
+
+      if (e.key === "ArrowLeft") {
+        onPrevious();
+      }
+    };
+
+    window.addEventListener("keydown", listener);
+
+    return () => window.removeEventListener("keydown", listener);
   }, [photo]);
 
   return (
@@ -37,15 +40,18 @@ export default function Lightbox({
       <div className="fixed inset-0 bg-black/90" aria-hidden="true" />
 
       <div className="fixed inset-0">
-        <DialogPanel
-          className={twMerge(
-            "h-screen w-screen grid",
-            photo?.caption && "grid-rows-[max-content,1fr]"
-          )}
-        >
-          {photo?.caption && (
+        <DialogPanel className="h-screen w-screen grid grid-rows-[max-content,1fr]">
+          {photo && (
             <Description className="p-4 pb-0 pr-14 text-white/90 text-sm font-semibold">
-              {photo?.caption}
+              <span className="tabular-nums">
+                {new Date(photo.date).toLocaleString("en-US", {
+                  timeZone: "UTC",
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+              {photo.caption && ` — ${photo.caption}`}
             </Description>
           )}
           <img
