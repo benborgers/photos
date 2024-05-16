@@ -30,13 +30,10 @@ class GetPhotos
             $yamlPath = resource_path('legacy-photos/'.$directory.'/index.yaml');
             $data = Yaml::parse(file_get_contents($yamlPath));
 
-            $thumbnailFilename = md5($data['photo']).'-thumbnail.jpg';
-
-            if (! Storage::exists($thumbnailFilename)) {
-                Image::load(public_path($data['photo']))
-                    ->fit(Fit::Crop, 200, 200)
-                    ->save(Storage::path($thumbnailFilename));
-            }
+            self::optimizeThumbnail(
+                public_path($data['photo']),
+                $thumbnailFilename = md5($data['photo']).'-thumbnail.jpg'
+            );
 
             $photos[] = [
                 'date' => $data['date'],
@@ -86,13 +83,10 @@ class GetPhotos
                 $file = Storage::put($filename, file_get_contents($icloudUrl));
             }
 
-            $thumbnailFilename = $id.'-thumbnail.jpg';
-
-            if (! Storage::exists($thumbnailFilename)) {
-                Image::load(Storage::path($filename))
-                    ->fit(Fit::Crop, 200, 200)
-                    ->save(Storage::path($thumbnailFilename));
-            }
+            self::optimizeThumbnail(
+                Storage::path($filename),
+                $thumbnailFilename = $id.'-thumbnail.jpg'
+            );
 
             $url = Storage::url($filename);
             $thumbnail_url = Storage::url($thumbnailFilename);
@@ -116,5 +110,15 @@ class GetPhotos
         }
 
         return $maxFileSizeChecksum;
+    }
+
+    private static function optimizeThumbnail($originalPath, $optimizedPath)
+    {
+        if (! Storage::exists($optimizedPath)) {
+            Image::load($originalPath)
+                ->optimize()
+                ->fit(Fit::Crop, 200, 200)
+                ->save(Storage::path($optimizedPath));
+        }
     }
 }
