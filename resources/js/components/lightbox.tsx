@@ -5,13 +5,13 @@ import type { Photo } from "../lib/types";
 export default function Lightbox({
   photo,
   setPhoto,
-  onNext,
-  onPrevious,
+  nextPhoto,
+  previousPhoto,
 }: {
   photo: Photo | null;
   setPhoto: React.Dispatch<React.SetStateAction<Photo | null>>;
-  onNext: () => void;
-  onPrevious: () => void;
+  nextPhoto: Photo | null;
+  previousPhoto: Photo | null;
 }) {
   const onClose = () => setPhoto(null);
 
@@ -21,12 +21,12 @@ export default function Lightbox({
         return;
       }
 
-      if (e.key === "ArrowRight") {
-        onNext();
+      if (e.key === "ArrowRight" && nextPhoto) {
+        setPhoto(nextPhoto);
       }
 
-      if (e.key === "ArrowLeft") {
-        onPrevious();
+      if (e.key === "ArrowLeft" && previousPhoto) {
+        setPhoto(previousPhoto);
       }
     };
 
