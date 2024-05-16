@@ -26,7 +26,26 @@ export default function Calendar() {
         ))}
       </div>
 
-      <Lightbox photo={lightboxPhoto} setPhoto={setLightboxPhoto} />
+      <Lightbox
+        photo={lightboxPhoto}
+        setPhoto={setLightboxPhoto}
+        onNext={() => {
+          const index = photos.findIndex(
+            (photo) => photo.date === lightboxPhoto?.date
+          );
+          if (index && photos[index + 1]) {
+            setLightboxPhoto(photos[index + 1]);
+          }
+        }}
+        onPrevious={() => {
+          const index = photos.findIndex(
+            (photo) => photo.date === lightboxPhoto?.date
+          );
+          if (index && photos[index - 1]) {
+            setLightboxPhoto(photos[index - 1]);
+          }
+        }}
+      />
     </>
   );
 }

@@ -1,16 +1,36 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Description, Dialog, DialogPanel } from "@headlessui/react";
-import type { Photo } from "../lib/types";
 import { twMerge } from "tailwind-merge";
+import { tinykeys } from "tinykeys";
+import type { Photo } from "../lib/types";
 
 export default function Lightbox({
   photo,
   setPhoto,
+  onNext,
+  onPrevious,
 }: {
   photo: Photo | null;
   setPhoto: React.Dispatch<React.SetStateAction<Photo | null>>;
+  onNext: () => void;
+  onPrevious: () => void;
 }) {
   const onClose = () => setPhoto(null);
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      ArrowRight: () => {
+        if (!photo) return;
+        onNext();
+      },
+      ArrowLeft: () => {
+        if (!photo) return;
+        onPrevious();
+      },
+    });
+
+    return unsubscribe;
+  }, [photo]);
 
   return (
     <Dialog open={photo !== null} onClose={onClose} className="relative z-50">
