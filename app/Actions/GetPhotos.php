@@ -12,10 +12,10 @@ class GetPhotos
 {
     public static function call()
     {
-        return [
+        return collect([
             ...self::legacyPhotos(),
             ...self::icloudPhotos(),
-        ];
+        ])->sortBy('date')->values();
     }
 
     public static function legacyPhotos()

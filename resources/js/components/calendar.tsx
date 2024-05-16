@@ -33,7 +33,7 @@ export default function Calendar() {
           const index = photos.findIndex(
             (photo) => photo.date === lightboxPhoto?.date
           );
-          if (index && photos[index + 1]) {
+          if (index !== -1 && photos[index + 1]) {
             return photos[index + 1];
           }
           return null;
@@ -42,7 +42,7 @@ export default function Calendar() {
           const index = photos.findIndex(
             (photo) => photo.date === lightboxPhoto?.date
           );
-          if (index && photos[index - 1]) {
+          if (index !== -1 && photos[index - 1]) {
             return photos[index - 1];
           }
           return null;
