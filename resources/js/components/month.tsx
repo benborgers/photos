@@ -114,9 +114,7 @@ const Day = ({
     >
       {photo && (
         <img
-          src={`https://wsrv.nl?url=${encodeURIComponent(
-            photo.url
-          )}&w=200&h=200&fit=cover&output=webp`}
+          src={photo.thumbnail_url}
           loading="lazy"
           className="cursor-zoom-in"
           onClick={onClick}

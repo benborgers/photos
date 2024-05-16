@@ -10,6 +10,7 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "spatie/image": "^3.6",
         "symfony/yaml": "^7.0"
     },
     "require-dev": {
