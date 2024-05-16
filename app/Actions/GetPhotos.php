@@ -126,6 +126,8 @@ class GetPhotos
 
     private static function optimizeThumbnail($originalPath, $optimizedPath)
     {
+        info("Optimizing thumbnail: {$originalPath}");
+
         if (! Storage::exists($optimizedPath)) {
             Image::load($originalPath)
                 ->fit(Fit::Crop, 200, 200)
@@ -135,6 +137,8 @@ class GetPhotos
 
     private static function optimizeFullSize($originalPath, $optimizedPath)
     {
+        info("Optimizing full size: {$originalPath}");
+
         if (! Storage::exists($optimizedPath)) {
             Image::load($originalPath)
                 ->fit(Fit::Max, 2000, 2000)
