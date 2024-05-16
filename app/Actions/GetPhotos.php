@@ -35,11 +35,16 @@ class GetPhotos
                 $thumbnailFilename = md5($data['photo']).'-thumbnail.jpg'
             );
 
+            self::optimizeFullSize(
+                public_path($data['photo']),
+                $displayFilename = md5($data['photo']).'-display.jpg'
+            );
+
             $photos[] = [
                 'date' => $data['date'],
                 'caption' => $data['caption'] ?? null,
-                'url' => url($data['photo']),
                 'thumbnail_url' => Storage::url($thumbnailFilename),
+                'url' => Storage::url($displayFilename),
             ];
         }
 
@@ -80,7 +85,7 @@ class GetPhotos
             $filename = $id.'.jpg';
 
             if (! Storage::exists($filename)) {
-                $file = Storage::put($filename, file_get_contents($icloudUrl));
+                Storage::put($filename, file_get_contents($icloudUrl));
             }
 
             self::optimizeThumbnail(
@@ -88,10 +93,17 @@ class GetPhotos
                 $thumbnailFilename = $id.'-thumbnail.jpg'
             );
 
-            $url = Storage::url($filename);
-            $thumbnail_url = Storage::url($thumbnailFilename);
+            self::optimizeFullSize(
+                Storage::path($filename),
+                $displayFilename = $id.'-display.jpg'
+            );
 
-            return compact('date', 'caption', 'url', 'thumbnail_url');
+            return [
+                'date' => $date,
+                'caption' => $caption,
+                'thumbnail_url' => Storage::url($thumbnailFilename),
+                'url' => Storage::url($displayFilename),
+            ];
         });
 
         return $photos;
@@ -116,8 +128,17 @@ class GetPhotos
     {
         if (! Storage::exists($optimizedPath)) {
             Image::load($originalPath)
-                ->optimize()
                 ->fit(Fit::Crop, 200, 200)
+                ->save(Storage::path($optimizedPath));
+        }
+    }
+
+    private static function optimizeFullSize($originalPath, $optimizedPath)
+    {
+        if (! Storage::exists($optimizedPath)) {
+            Image::load($originalPath)
+                ->fit(Fit::Max, 2000, 2000)
+                ->quality(90)
                 ->save(Storage::path($optimizedPath));
         }
     }
