@@ -93,16 +93,11 @@ const Day = ({
   photo?: Photo;
   onClick: () => void;
 }) => {
-  const [isToday, setIsToday] = useState(false);
-
-  useEffect(() => {
-    const now = new Date();
-    setIsToday(
-      now.getDate() === day &&
-        now.getMonth() === month - 1 &&
-        now.getFullYear() === year
-    );
-  }, []);
+  const now = new Date();
+  const isToday =
+    now.getDate() === day &&
+    now.getMonth() === month - 1 &&
+    now.getFullYear() === year;
 
   return (
     <div
