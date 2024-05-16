@@ -4,12 +4,14 @@ import { monthRange } from "@/lib/month-range";
 import type { Photo } from "@/lib/types";
 import Lightbox from "./lightbox";
 import { usePage } from "@inertiajs/react";
+import Caption from "./caption";
 
 export default function Calendar() {
   const props = usePage().props;
   const photos = props.photos as Photo[];
 
   const [lightboxPhoto, setLightboxPhoto] = useState<Photo | null>(null);
+  const [hoveredPhoto, setHoveredPhoto] = useState<Photo | null>(null);
 
   const months = monthRange(photos).reverse();
 
@@ -22,6 +24,7 @@ export default function Calendar() {
             year={year}
             month={month}
             onPhotoClick={setLightboxPhoto}
+            onPhotoHoverChange={setHoveredPhoto}
           />
         ))}
       </div>
@@ -48,6 +51,8 @@ export default function Calendar() {
           return null;
         })()}
       />
+
+      <Caption photo={hoveredPhoto} />
     </>
   );
 }

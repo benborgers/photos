@@ -27,10 +27,12 @@ export default function Month({
   year,
   month,
   onPhotoClick,
+  onPhotoHoverChange,
 }: {
   year: number;
   month: number;
   onPhotoClick: (photo: Photo) => void;
+  onPhotoHoverChange: (photo: Photo | null) => void;
 }) {
   const props = usePage().props;
   const photos = props.photos as Photo[];
@@ -67,11 +69,8 @@ export default function Month({
               month={month}
               day={day}
               photo={photo}
-              onClick={() => {
-                if (photo) {
-                  onPhotoClick(photo);
-                }
-              }}
+              onClick={(p) => onPhotoClick(p)}
+              onHover={(p) => onPhotoHoverChange(p)}
             />
           );
         })}
@@ -86,12 +85,14 @@ const Day = ({
   day,
   photo,
   onClick,
+  onHover,
 }: {
   year: number;
   month: number;
   day: number;
   photo?: Photo;
-  onClick: () => void;
+  onClick: (photo: Photo) => void;
+  onHover: (photo: Photo | null) => void;
 }) => {
   const now = new Date();
   const isToday =
@@ -112,7 +113,9 @@ const Day = ({
           src={photo.thumbnail_url}
           loading="lazy"
           className="cursor-zoom-in"
-          onClick={onClick}
+          onClick={() => onClick(photo)}
+          onMouseEnter={() => onHover(photo)}
+          onMouseLeave={() => onHover(null)}
         />
       )}
     </div>
