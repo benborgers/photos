@@ -35,6 +35,21 @@ export default function Lightbox({
     return () => window.removeEventListener("keydown", listener);
   }, [photo]);
 
+  useEffect(() => {
+    const preload = (src: string) => {
+      const image = new Image();
+      image.src = src;
+    };
+
+    if (nextPhoto) {
+      preload(nextPhoto.url);
+    }
+
+    if (previousPhoto) {
+      preload(previousPhoto.url);
+    }
+  }, [photo]);
+
   return (
     <Dialog open={photo !== null} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/90" aria-hidden="true" />
