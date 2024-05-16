@@ -21,8 +21,7 @@ export default function Calendar() {
             key={`${year}-${month}`}
             year={year}
             month={month}
-            // onPhotoClick={setLightboxPhoto}
-            onPhotoClick={(photo) => window.open(photo.url, "_blank")}
+            onPhotoClick={setLightboxPhoto}
           />
         ))}
       </div>
