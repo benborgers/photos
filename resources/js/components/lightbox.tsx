@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Description, Dialog, DialogPanel } from "@headlessui/react";
+import { usePage } from "@inertiajs/react";
 import type { Photo } from "../lib/types";
 
 export default function Lightbox({
@@ -13,6 +14,9 @@ export default function Lightbox({
   nextPhoto: Photo | null;
   previousPhoto: Photo | null;
 }) {
+  const page = usePage();
+  const photos = page.props.photos as Photo[];
+
   const onClose = () => setPhoto(null);
 
   useEffect(() => {
@@ -49,6 +53,23 @@ export default function Lightbox({
       preload(previousPhoto.url);
     }
   }, [photo]);
+
+  useEffect(() => {
+    const url = new URL(page.url, location.origin);
+    if (photo) {
+      url.searchParams.set("date", photo.date);
+    } else {
+      url.searchParams.delete("date");
+    }
+    window.history.replaceState({}, "", url.toString());
+  }, [photo]);
+
+  useEffect(() => {
+    const date = new URL(page.url, location.origin).searchParams.get("date");
+    if (date) {
+      setPhoto(photos.find((p) => p.date === date) ?? null);
+    }
+  }, []);
 
   return (
     <Dialog open={photo !== null} onClose={onClose} className="relative z-50">
