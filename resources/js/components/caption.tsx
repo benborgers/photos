@@ -37,11 +37,12 @@ export default function Caption({ photo }: { photo: Photo | null }) {
     <div
       className={twMerge(
         "absolute bg-gray-800/95 border border-gray-600 shadow-lg text-white px-1.5 py-0.5 rounded-md",
-        !photo?.caption && "hidden"
+        "hidden",
+        photo?.caption && "can-hover:block"
       )}
       ref={container}
     >
-      <p className="text-sm font-semibold max-w-64">{photo?.caption}</p>
+      <p className="text-sm font-medium max-w-64">{photo?.caption}</p>
     </div>
   );
 }
