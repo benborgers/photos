@@ -14,7 +14,7 @@ class CachePhotos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 60 * 15;
+    public $timeout = 60 * 15; // 15 minutes
 
     public function handle(): void
     {
