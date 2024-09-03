@@ -86,7 +86,15 @@ class GetPhotos
             $filename = $id.'.jpg';
 
             if (! Storage::exists($filename)) {
-                Storage::put($filename, file_get_contents($icloudUrl));
+                // uniqid() is used so that people can't catch the file publicly exposed as it's processing.
+                $imageWithExifFilename = $id.'-'.uniqid().'-dangerous.jpg';
+                Storage::put($imageWithExifFilename, file_get_contents($icloudUrl));
+
+                // Strip exif data (GPS location, etc) for privacy.
+                $image = imagecreatefromjpeg(Storage::path($imageWithExifFilename));
+                imagejpeg($image, Storage::path($filename), 100);
+                imagedestroy($image);
+                Storage::delete($imageWithExifFilename);
             }
 
             self::optimizeThumbnail(
