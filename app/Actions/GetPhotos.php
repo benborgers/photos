@@ -53,8 +53,7 @@ class GetPhotos
 
     public static function icloudPhotos()
     {
-        // Retrieved from: https://www.icloud.com/sharedalbum/#B1n5Uzl7VG2pWXt
-        $BASE = 'https://p111-sharedstreams.icloud.com/B1n5Uzl7VG2pWXt';
+        $BASE = env('ICLOUD_PHOTOS_BASE');
 
         $photos = [];
 
