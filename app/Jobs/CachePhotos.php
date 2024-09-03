@@ -14,6 +14,8 @@ class CachePhotos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 60 * 15;
+
     public function handle(): void
     {
         Cache::set('photos', GetPhotos::call());
