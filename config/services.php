@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'icloud' => [
+        'base_url' => env('ICLOUD_PHOTOS_BASE_URL'),
+    ],
+
 ];

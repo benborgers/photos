@@ -53,7 +53,7 @@ class GetPhotos
 
     public static function icloudPhotos()
     {
-        $BASE = env('ICLOUD_PHOTOS_BASE');
+        $BASE = config('services.icloud.base_url');
 
         $photos = [];
 
