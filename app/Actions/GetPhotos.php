@@ -84,10 +84,7 @@ class GetPhotos
 
             $filename = $id.'.jpg';
 
-            info($filename);
-
             if (! Storage::exists($filename)) {
-                info("Downloading {$filename}");
                 // uniqid() is used so that people can't catch the file publicly exposed as it's processing.
                 $imageWithExifFilename = $id.'-'.uniqid().'-dangerous.jpg';
                 Storage::put($imageWithExifFilename, file_get_contents($icloudUrl));
