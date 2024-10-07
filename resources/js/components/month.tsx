@@ -42,7 +42,16 @@ export default function Month({
     days.push(i);
   }
 
-  const offset = new Date(year, month - 1, 1).getDay();
+  const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
+  const offset = {
+    0: 6,
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+    5: 4,
+    6: 5,
+  }[firstDayOfWeek] as number;
 
   return (
     <div className="rounded-xl overflow-hidden">
@@ -52,7 +61,7 @@ export default function Month({
         </h2>
       </div>
       <div className="bg-gray-800 p-1.5 sm:p-3 grid grid-cols-7 gap-1.5 sm:gap-3">
-        {Array.from({ length: offset - 1 })
+        {Array.from({ length: offset })
           .fill(null)
           .map((_, i) => (
             <div key={i} />
