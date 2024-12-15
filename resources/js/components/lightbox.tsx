@@ -90,11 +90,19 @@ export default function Lightbox({
               {photo.caption && ` — ${photo.caption}`}
             </Description>
           )}
-          <img
-            src={photo?.url}
-            alt=""
-            className="overflow-clip h-full w-full min-w-0 min-h-0 object-contain p-4"
-          />
+          {photo?.url.endsWith(".mp4") ? (
+            <video
+              src={photo?.url}
+              controls
+              className="overflow-clip h-full w-full min-w-0 min-h-0 object-contain p-4"
+            />
+          ) : (
+            <img
+              src={photo?.url}
+              alt=""
+              className="overflow-clip h-full w-full min-w-0 min-h-0 object-contain p-4"
+            />
+          )}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-white/80 bg-white/10 rounded-full h-8 w-8 text-xl font-medium"

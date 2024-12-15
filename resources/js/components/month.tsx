@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { usePage } from "@inertiajs/react";
 import type { Photo } from "../lib/types";
+import { PlayCircleIcon } from "@heroicons/react/24/solid";
 
 const MONTH_NAMES = [
   "January",
@@ -118,14 +118,20 @@ const Day = ({
       )}
     >
       {photo && (
-        <img
-          src={photo.thumbnail_url}
-          loading="lazy"
-          className="cursor-zoom-in"
+        <div
+          className="cursor-zoom-in size-full"
           onClick={() => onClick(photo)}
           onMouseEnter={() => onHover(photo)}
           onMouseLeave={() => onHover(null)}
-        />
+        >
+          {photo.url.endsWith(".mp4") ? (
+            <div className="size-full bg-rose-900 grid place-items-center">
+              <PlayCircleIcon className="h-8 w-8 text-white" />
+            </div>
+          ) : (
+            <img src={photo.thumbnail_url} loading="lazy" />
+          )}
+        </div>
       )}
     </div>
   );

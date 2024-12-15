@@ -82,28 +82,37 @@ class GetPhotos
 
             $icloudUrl = 'https://'.$asset['url_location'].$asset['url_path'];
 
-            $filename = $id.'.jpg';
+            $extension = str($asset['url_path'])->lower()->contains('mp4')
+                ? 'mp4'
+                : 'jpg';
+
+            $filename = $id.'.'.$extension;
 
             if (! Storage::exists($filename)) {
-                // uniqid() is used so that people can't catch the file publicly exposed as it's processing.
-                $imageWithExifFilename = $id.'-'.uniqid().'-dangerous.jpg';
-                Storage::put($imageWithExifFilename, file_get_contents($icloudUrl));
+                if ($extension === 'mp4') {
+                    // Videos are so rare that we assume they already don't have exif data. Use `exiftool` locally.
+                    Storage::put($filename, file_get_contents($icloudUrl));
+                } else {
+                    // uniqid() is used so that people can't catch the file publicly exposed as it's processing.
+                    $imageWithExifFilename = $id.'-'.uniqid().'-dangerous.jpg';
+                    Storage::put($imageWithExifFilename, file_get_contents($icloudUrl));
 
-                // Strip exif data (GPS location, etc) for privacy.
-                $image = imagecreatefromjpeg(Storage::path($imageWithExifFilename));
-                imagejpeg($image, Storage::path($filename), 100);
-                imagedestroy($image);
-                Storage::delete($imageWithExifFilename);
+                    // Strip exif data (GPS location, etc) for privacy.
+                    $image = imagecreatefromjpeg(Storage::path($imageWithExifFilename));
+                    imagejpeg($image, Storage::path($filename), 100);
+                    imagedestroy($image);
+                    Storage::delete($imageWithExifFilename);
+                }
             }
 
             self::optimizeThumbnail(
                 Storage::path($filename),
-                $thumbnailFilename = $id.'-thumbnail.jpg'
+                $thumbnailFilename = $id.'-thumbnail.'.$extension
             );
 
             self::optimizeFullSize(
                 Storage::path($filename),
-                $displayFilename = $id.'-display.jpg'
+                $displayFilename = $id.'-display.'.$extension
             );
 
             return [
@@ -134,6 +143,10 @@ class GetPhotos
 
     private static function optimizeThumbnail($originalPath, $optimizedPath)
     {
+        if (self::isVideo($originalPath)) {
+            return;
+        }
+
         if (! Storage::exists($optimizedPath)) {
             Image::load($originalPath)
                 ->fit(Fit::Crop, 200, 200)
@@ -143,11 +156,21 @@ class GetPhotos
 
     private static function optimizeFullSize($originalPath, $optimizedPath)
     {
+        if (self::isVideo($originalPath)) {
+            copy($originalPath, Storage::path($optimizedPath));
+            return;
+        }
+
         if (! Storage::exists($optimizedPath)) {
             Image::load($originalPath)
                 ->fit(Fit::Max, 2000, 2000)
                 ->quality(90)
                 ->save(Storage::path($optimizedPath));
         }
+    }
+
+    private static function isVideo($path)
+    {
+        return str($path)->endsWith('.mp4');
     }
 }

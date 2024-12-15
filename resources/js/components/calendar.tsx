@@ -1,9 +1,9 @@
 import { useState } from "react";
+import { usePage } from "@inertiajs/react";
 import Month from "./month";
 import { monthRange } from "@/lib/month-range";
 import type { Photo } from "@/lib/types";
 import Lightbox from "./lightbox";
-import { usePage } from "@inertiajs/react";
 import Caption from "./caption";
 
 export default function Calendar() {
