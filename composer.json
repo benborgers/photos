@@ -11,6 +11,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "spatie/image": "^3.6",
+        "spatie/laravel-ray": "^1.39",
         "symfony/yaml": "^7.0"
     },
     "require-dev": {
