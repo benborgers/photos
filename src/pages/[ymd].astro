@@ -1,35 +1,31 @@
 ---
-import fs from "node:fs";
 import { Picture } from "astro:assets";
 import type { GetStaticPaths } from "astro";
 import { format, parseISO } from "date-fns";
 import Layout from "../components/layout.astro";
-import getPhotos from "../lib/get-photos";
+import { getPhotoFiles, getPhotos } from "../lib/photos";
+import { getCaption } from "../lib/captions";
 
 export const getStaticPaths = (() => {
   const photos = getPhotos();
   return photos.map((photo) => {
     return {
-      params: { date: photo.date },
-      props: { date: photo.date, filename: photo.filename },
+      params: { ymd: photo.ymd },
+      props: { ymd: photo.ymd, filename: photo.filename },
     };
   });
 }) satisfies GetStaticPaths;
 
-const { date, filename } = Astro.props;
+const { ymd, filename } = Astro.props;
 
-const captionPath = `./src/photos/${date}.txt`;
-const caption = fs.existsSync(captionPath)
-  ? fs.readFileSync(captionPath, "utf-8")
-  : undefined;
+const caption = await getCaption(ymd);
 
 const photos = getPhotos();
-const dates = photos.map((photo) => photo.date);
+const ymds = photos.map((photo) => photo.ymd);
+const previousYmd = ymds[ymds.indexOf(ymd) - 1];
+const nextYmd = ymds[ymds.indexOf(ymd) + 1];
 
-const previousDate = dates[dates.indexOf(date) - 1];
-const nextDate = dates[dates.indexOf(date) + 1];
-
-const title = format(parseISO(date), "PPPP");
+const title = format(parseISO(ymd), "PPPP");
 ---
 
 <Layout title={title}>
@@ -39,41 +35,40 @@ const title = format(parseISO(date), "PPPP");
 
       <p class="space-x-1">
         <a
-          href={previousDate ? `/${previousDate}` : "/"}
+          href={previousYmd ? `/${previousYmd}` : `/${ymd}`}
           data-previous
           class:list={[
             "inline-block font-sans font-bold",
-            previousDate
-              ? "text-blue-800"
-              : "text-gray-300 pointer-events-none",
+            previousYmd ? "text-blue-800" : "text-gray-300 pointer-events-none",
           ]}
         >
           &larr;
         </a>
 
         <a
-          href={nextDate ? `/${nextDate}` : "/"}
+          href={nextYmd ? `/${nextYmd}` : `/${ymd}`}
           data-next
           class:list={[
             "inline-block font-sans font-bold",
-            nextDate ? "text-blue-800" : "text-gray-300 pointer-events-none",
+            nextYmd ? "text-blue-800" : "text-gray-300 pointer-events-none",
           ]}
         >
           &rarr;
         </a>
       </p>
     </div>
-    <p class="text-gray-400">#999</p>
+
+    <p class="text-gray-400">#{ymds.indexOf(ymd) + 1}</p>
 
     <Picture
-      src={import(`../photos/${filename}`)}
+      src={getPhotoFiles()[filename]()}
       formats={["avif", "webp"]}
       alt=""
       widths={[400, 800, 1200]}
       class="mt-4"
     />
 
-    <p class="mt-4 text-gray-500 italic">{caption}</p>
+    {caption && <p class="mt-4 text-gray-500 italic">{caption}</p>}
   </div>
 
   <script>

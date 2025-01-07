@@ -2,33 +2,17 @@
 import { eachMonthOfInterval, format } from "date-fns";
 import Layout from "../components/layout.astro";
 import Month from "../components/month.astro";
-import getPhotos from "../lib/get-photos";
+import { getPhotos } from "../lib/photos";
 
 const photos = getPhotos();
 
-const firstDate = new Date(photos[0].date);
-const lastDate = new Date(photos[photos.length - 1].date);
+const firstDate = new Date(photos[0].ymd);
+const lastDate = new Date(photos[photos.length - 1].ymd);
 
 const months = eachMonthOfInterval({
   start: firstDate,
   end: lastDate,
 }).reverse();
-
-let daysInARow = 0;
-
-let cursor = new Date();
-
-while (true) {
-  const ymd = format(cursor, "yyyy-MM-dd");
-
-  if (photos.some((photo) => photo.date === ymd)) {
-    daysInARow++;
-  } else {
-    break;
-  }
-
-  cursor.setDate(cursor.getDate() - 1);
-}
 ---
 
 <Layout>
