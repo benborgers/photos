@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { Picture } from "astro:assets";
 import { getDaysInMonth, format, isToday } from "date-fns";
 import Square from "./square.astro";
+import { getPhotoFiles, getPhotos } from "../lib/photos";
 
 interface Props {
   month: number;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const { month, year } = Astro.props;
+
+const photos = getPhotos();
 
 const date = new Date(year, month - 1);
 
@@ -32,12 +35,11 @@ const title = format(date, "MMMM yyyy");
         const date = new Date(year, month - 1, day);
         const ymd = format(date, "yyyy-MM-dd");
 
-        const photoPath = `./src/photos/${ymd}.jpg`;
-        const photoExists = fs.existsSync(photoPath);
+        const photo = photos.find((photo) => photo.ymd === ymd);
 
         const today = isToday(date);
 
-        if (!photoExists) {
+        if (!photo) {
           return <Square isToday={today} />;
         }
 
@@ -45,7 +47,7 @@ const title = format(date, "MMMM yyyy");
           <Square isToday={today}>
             <a href={`/${ymd}`}>
               <Picture
-                src={import(`../photos/${ymd}.jpg`)}
+                src={getPhotoFiles()[photo.filename]()}
                 formats={["avif", "webp"]}
                 alt=""
                 width={200}
