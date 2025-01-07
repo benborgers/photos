@@ -4,7 +4,8 @@
   "version": "1.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run copy-videos && astro build",
+    "copy-videos": "mkdir -p public/photos && cp src/photos/*.mov public/photos/",
     "preview": "astro preview",
     "astro": "astro"
   },

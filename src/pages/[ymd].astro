@@ -11,12 +11,16 @@ export const getStaticPaths = (() => {
   return photos.map((photo) => {
     return {
       params: { ymd: photo.ymd },
-      props: { ymd: photo.ymd, filename: photo.filename },
+      props: {
+        ymd: photo.ymd,
+        filename: photo.filename,
+        extension: photo.extension,
+      },
     };
   });
 }) satisfies GetStaticPaths;
 
-const { ymd, filename } = Astro.props;
+const { ymd, filename, extension } = Astro.props;
 
 const caption = await getCaption(ymd);
 
@@ -60,13 +64,21 @@ const title = format(parseISO(ymd), "PPPP");
 
     <p class="text-gray-400">#{ymds.indexOf(ymd) + 1}</p>
 
-    <Picture
-      src={getPhotoFiles()[filename]()}
-      formats={["avif"]}
-      alt=""
-      width={1200}
-      class="mt-4"
-    />
+    {
+      extension === "mov" ? (
+        <div class="mt-4">
+          <video src={`/photos/${ymd}.${extension}`} controls class="w-full" />
+        </div>
+      ) : (
+        <Picture
+          src={getPhotoFiles()[filename]()}
+          formats={["avif"]}
+          alt=""
+          width={1200}
+          class="mt-4"
+        />
+      )
+    }
 
     {caption && <p class="mt-4 text-gray-500 italic">{caption}</p>}
   </div>

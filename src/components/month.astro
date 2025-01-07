@@ -43,6 +43,18 @@ const title = format(date, "MMMM yyyy");
           return <Square isToday={today} />;
         }
 
+        if (photo.extension === "mov") {
+          return (
+            <Square isToday={today}>
+              <a href={`/${ymd}`}>
+                <div class="flex items-center justify-center h-full bg-gray-300">
+                  <div class="text-3xl">▶</div>
+                </div>
+              </a>
+            </Square>
+          );
+        }
+
         return (
           <Square isToday={today}>
             <a href={`/${ymd}`}>
