@@ -1,6 +1,7 @@
 export async function getCaption(ymd: string): Promise<string | undefined> {
   const captions = import.meta.glob("/src/photos/*.txt", {
-    as: "raw",
+    query: "?raw",
+    import: "default",
   });
 
   const path = `/src/photos/${ymd}.txt`;
@@ -9,5 +10,5 @@ export async function getCaption(ymd: string): Promise<string | undefined> {
     return undefined;
   }
 
-  return await captions[path]();
+  return (await captions[path]()) as string;
 }
