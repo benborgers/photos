@@ -1,3 +1,23 @@
-<div class="p-0.5 sm:p-1 border-r border-b border-gray-300 aspect-square">
+---
+interface Props {
+  isToday?: boolean;
+}
+
+const { isToday = false } = Astro.props;
+---
+
+<div
+  class="relative p-0.5 sm:p-1 border-r border-b border-gray-300 aspect-square"
+>
   <slot />
+
+  {
+    isToday && (
+      <img
+        src="/circle.png"
+        alt=""
+        class="absolute -top-[15%] -left-[15%] h-[130%] max-w-none pointer-events-none"
+      />
+    )
+  }
 </div>
