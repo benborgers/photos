@@ -1,23 +1,29 @@
 ---
 interface Props {
-  isToday?: boolean;
+  ymd?: string;
 }
 
-const { isToday = false } = Astro.props;
+const { ymd } = Astro.props;
 ---
 
 <div
   class="relative p-0.5 sm:p-1 border-r border-b border-gray-300 aspect-square"
+  data-ymd={ymd}
 >
   <slot />
+</div>
 
-  {
-    isToday && (
+<script>
+  const nowYmd = new Date().toISOString().split("T")[0];
+  const square = document.querySelector(`[data-ymd="${nowYmd}"]`);
+
+  if (square) {
+    square.innerHTML += `
       <img
         src="/circle.png"
         alt=""
         class="absolute -top-[15%] -left-[15%] h-[130%] max-w-none pointer-events-none"
       />
-    )
+    `;
   }
-</div>
+</script>
