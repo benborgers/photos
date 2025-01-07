@@ -1,0 +1,65 @@
+---
+import fs from "node:fs";
+import { Picture } from "astro:assets";
+import { getDaysInMonth, format } from "date-fns";
+import Square from "./square.astro";
+
+interface Props {
+  month: number;
+  year: number;
+}
+
+const { month, year } = Astro.props;
+
+const date = new Date(year, month - 1);
+
+const daysInMonth = getDaysInMonth(date);
+const fillDaysBefore = (new Date(year, month - 1, 1).getDay() + 6) % 7;
+const fillDaysAfter = (7 - ((fillDaysBefore + daysInMonth) % 7)) % 7;
+
+const title = format(date, "MMMM yyyy");
+---
+
+<div>
+  <div class="border border-b-0 border-gray-300 px-2 py-1">
+    <p class="font-bold">{title}</p>
+  </div>
+
+  <div class="grid grid-cols-7 border-t border-l border-gray-300">
+    {Array.from({ length: fillDaysBefore }, () => <Square />)}
+    {
+      Array.from({ length: daysInMonth }, (_, i) => i + 1).map(async (day) => {
+        const date = new Date(year, month - 1, day);
+        const ymd = format(date, "yyyy-MM-dd");
+
+        const photoPath = `./src/photos/${ymd}.jpg`;
+        const photoExists = fs.existsSync(photoPath);
+
+        const captionPath = `./src/photos/${ymd}.txt`;
+        const caption = fs.existsSync(captionPath)
+          ? fs.readFileSync(captionPath, "utf-8")
+          : undefined;
+
+        if (!photoExists) {
+          return <Square />;
+        }
+
+        return (
+          <Square>
+            <a href={`/${ymd}`}>
+              <Picture
+                src={import(`../photos/${ymd}.jpg`)}
+                formats={["avif", "webp"]}
+                alt=""
+                width={200}
+                height={200}
+                class="aspect-square object-cover"
+              />
+            </a>
+          </Square>
+        );
+      })
+    }
+    {Array.from({ length: fillDaysAfter }, () => <Square />)}
+  </div>
+</div>

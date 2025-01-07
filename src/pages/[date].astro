@@ -1,0 +1,96 @@
+---
+import fs from "node:fs";
+import { Picture } from "astro:assets";
+import type { GetStaticPaths } from "astro";
+import { format, parseISO } from "date-fns";
+import Layout from "../components/layout.astro";
+import getPhotos from "../lib/get-photos";
+
+export const getStaticPaths = (() => {
+  const photos = getPhotos();
+  return photos.map((photo) => {
+    return {
+      params: { date: photo.date },
+      props: { date: photo.date, filename: photo.filename },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+const { date, filename } = Astro.props;
+
+const captionPath = `./src/photos/${date}.txt`;
+const caption = fs.existsSync(captionPath)
+  ? fs.readFileSync(captionPath, "utf-8")
+  : undefined;
+
+const photos = getPhotos();
+const dates = photos.map((photo) => photo.date);
+
+const previousDate = dates[dates.indexOf(date) - 1];
+const nextDate = dates[dates.indexOf(date) + 1];
+
+const title = format(parseISO(date), "PPPP");
+---
+
+<Layout title={title}>
+  <div>
+    <div class="flex justify-between">
+      <p class="font-bold">{title}</p>
+
+      <p class="space-x-1">
+        <a
+          href={previousDate ? `/${previousDate}` : "/"}
+          data-previous
+          class:list={[
+            "inline-block font-sans font-bold",
+            previousDate
+              ? "text-blue-800"
+              : "text-gray-300 pointer-events-none",
+          ]}
+        >
+          &larr;
+        </a>
+
+        <a
+          href={nextDate ? `/${nextDate}` : "/"}
+          data-next
+          class:list={[
+            "inline-block font-sans font-bold",
+            nextDate ? "text-blue-800" : "text-gray-300 pointer-events-none",
+          ]}
+        >
+          &rarr;
+        </a>
+      </p>
+    </div>
+    <p class="text-gray-400">#999</p>
+
+    <Picture
+      src={import(`../photos/${filename}`)}
+      formats={["avif", "webp"]}
+      alt=""
+      widths={[400, 800, 1200]}
+      class="mt-4"
+    />
+
+    <p class="mt-4 text-gray-500 italic">{caption}</p>
+  </div>
+
+  <script>
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" && !event.metaKey) {
+        (
+          document.querySelector("[data-previous]") as HTMLAnchorElement
+        ).click();
+      }
+
+      if (event.key === "ArrowRight" && !event.metaKey) {
+        (document.querySelector("[data-next]") as HTMLAnchorElement).click();
+      }
+
+      if (event.key === "Escape" && !event.metaKey) {
+        window.location.href = "/";
+      }
+    });
+  </script>
+</Layout>
