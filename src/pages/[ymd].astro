@@ -67,7 +67,12 @@ const title = format(parseISO(ymd), "PPPP");
     {
       extension === "mov" ? (
         <div class="mt-4">
-          <video src={`/photos/${ymd}.${extension}`} controls class="w-full" />
+          <video
+            src={`/photos/${ymd}.${extension}`}
+            controls
+            playsinline
+            class="w-full"
+          />
         </div>
       ) : (
         <Picture
