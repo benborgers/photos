@@ -14,7 +14,13 @@ const { ymd } = Astro.props;
 </div>
 
 <script>
-  const nowYmd = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const nowYmd =
+    now.getFullYear() +
+    "-" +
+    String(now.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(now.getDate()).padStart(2, "0");
   const square = document.querySelector(`[data-ymd="${nowYmd}"]`);
 
   if (square) {
