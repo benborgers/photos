@@ -77,7 +77,7 @@ const title = format(parseISO(ymd), "PPPP");
       ) : (
         <Picture
           src={getPhotoFiles()[filename]()}
-          formats={["avif"]}
+          format="avif"
           alt=""
           width={2000}
           class="mt-4"
