@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "npm run copy-videos && astro build",
-    "copy-videos": "mkdir -p public/photos && cp src/photos/*.mov public/photos/",
+    "copy-videos": "mkdir -p public/photos && cp src/photos/*.mov public/photos/ 2>/dev/null",
     "preview": "astro preview",
     "astro": "astro"
   },
