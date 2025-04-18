@@ -1,5 +1,5 @@
 export function getPhotoFiles(): Record<string, any> {
-  return import.meta.glob("/src/photos/*.{jpg,png,mov}");
+  return import.meta.glob("/src/photos/*.{jpg,png,gif,mov}");
 }
 
 export function getPhotos(): {
