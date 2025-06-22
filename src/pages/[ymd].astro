@@ -85,7 +85,11 @@ const title = format(parseISO(ymd), "PPPP");
       )
     }
 
-    {caption && <p class="mt-4 text-gray-500 italic">{caption}</p>}
+    {
+      caption && (
+        <p class="mt-4 text-gray-500 italic whitespace-pre-line">{caption}</p>
+      )
+    }
   </div>
 
   <script>
