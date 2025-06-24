@@ -1,5 +1,5 @@
 ---
-import { Picture } from "astro:assets";
+import { Image, Picture } from "astro:assets";
 import type { GetStaticPaths } from "astro";
 import { format, parseISO } from "date-fns";
 import Layout from "../components/layout.astro";
@@ -75,9 +75,9 @@ const title = format(parseISO(ymd), "PPPP");
           />
         </div>
       ) : (
-        <Picture
+        <Image
           src={getPhotoFiles()[filename]()}
-          formats={["avif"]}
+          format="jpg"
           alt=""
           width={2000}
           class="mt-4"

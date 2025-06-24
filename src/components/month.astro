@@ -1,9 +1,8 @@
 ---
-import fs from "node:fs";
-import { Picture } from "astro:assets";
-import { getDaysInMonth, format, isToday } from "date-fns";
-import Square from "./square.astro";
+import { Image } from "astro:assets";
+import { format, getDaysInMonth } from "date-fns";
 import { getPhotoFiles, getPhotos } from "../lib/photos";
+import Square from "./square.astro";
 
 interface Props {
   month: number;
@@ -56,9 +55,9 @@ const title = format(date, "MMMM yyyy");
         return (
           <Square ymd={ymd}>
             <a href={`/${ymd}`}>
-              <Picture
+              <Image
                 src={getPhotoFiles()[photo.filename]()}
-                formats={["avif"]}
+                format="jpg"
                 alt=""
                 width={200}
                 height={200}
