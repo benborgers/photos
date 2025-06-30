@@ -37,29 +37,35 @@ const title = format(parseISO(ymd), "PPPP");
     <div class="flex items-center justify-between">
       <p class="font-bold">{title}</p>
 
-      <p class="space-x-1">
-        <a
-          href={previousYmd ? `/${previousYmd}` : `/${ymd}`}
-          data-previous
-          class:list={[
-            "inline-block font-sans font-bold",
-            previousYmd ? "text-blue-800" : "text-gray-300 pointer-events-none",
-          ]}
-        >
-          &larr;
-        </a>
+      <nav class="space-x-1">
+        {previousYmd ? (
+          <a
+            href={`/${previousYmd}`}
+            data-previous
+            class="inline-block font-sans font-bold text-blue-800"
+          >
+            &larr;
+          </a>
+        ) : (
+          <span class="inline-block font-sans font-bold text-gray-300">
+            &larr;
+          </span>
+        )}
 
-        <a
-          href={nextYmd ? `/${nextYmd}` : `/${ymd}`}
-          data-next
-          class:list={[
-            "inline-block font-sans font-bold",
-            nextYmd ? "text-blue-800" : "text-gray-300 pointer-events-none",
-          ]}
-        >
-          &rarr;
-        </a>
-      </p>
+        {nextYmd ? (
+          <a
+            href={`/${nextYmd}`}
+            data-next
+            class="inline-block font-sans font-bold text-blue-800"
+          >
+            &rarr;
+          </a>
+        ) : (
+          <span class="inline-block font-sans font-bold text-gray-300">
+            &rarr;
+          </span>
+        )}
+      </nav>
     </div>
 
     <p class="text-gray-400">#{ymds.indexOf(ymd) + 1}</p>
@@ -95,13 +101,17 @@ const title = format(parseISO(ymd), "PPPP");
   <script>
     window.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft" && !event.metaKey) {
-        (
-          document.querySelector("[data-previous]") as HTMLAnchorElement
-        ).click();
+        const previousLink = document.querySelector("[data-previous]") as HTMLAnchorElement;
+        if (previousLink) {
+          previousLink.click();
+        }
       }
 
       if (event.key === "ArrowRight" && !event.metaKey) {
-        (document.querySelector("[data-next]") as HTMLAnchorElement).click();
+        const nextLink = document.querySelector("[data-next]") as HTMLAnchorElement;
+        if (nextLink) {
+          nextLink.click();
+        }
       }
 
       if (event.key === "Escape" && !event.metaKey) {
