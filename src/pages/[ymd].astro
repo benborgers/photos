@@ -95,13 +95,17 @@ const title = format(parseISO(ymd), "PPPP");
   <script>
     window.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft" && !event.metaKey) {
-        (
-          document.querySelector("[data-previous]") as HTMLAnchorElement
-        ).click();
+        const previousLink = document.querySelector("[data-previous]") as HTMLAnchorElement;
+        if (previousLink && !previousLink.classList.contains("pointer-events-none")) {
+          previousLink.click();
+        }
       }
 
       if (event.key === "ArrowRight" && !event.metaKey) {
-        (document.querySelector("[data-next]") as HTMLAnchorElement).click();
+        const nextLink = document.querySelector("[data-next]") as HTMLAnchorElement;
+        if (nextLink && !nextLink.classList.contains("pointer-events-none")) {
+          nextLink.click();
+        }
       }
 
       if (event.key === "Escape" && !event.metaKey) {
