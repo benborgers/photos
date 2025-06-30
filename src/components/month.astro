@@ -43,8 +43,8 @@ const title = format(date, "MMMM yyyy");
         if (photo.extension === "mov") {
           return (
             <Square ymd={ymd}>
-              <a href={`/${ymd}`}>
-                <div class="flex items-center justify-center h-full bg-gray-300">
+              <a href={`/${ymd}`} class="block w-full h-full">
+                <div class="flex items-center justify-center w-full h-full bg-gray-300">
                   <div class="text-3xl">▶</div>
                 </div>
               </a>
@@ -54,14 +54,12 @@ const title = format(date, "MMMM yyyy");
 
         return (
           <Square ymd={ymd}>
-            <a href={`/${ymd}`}>
+            <a href={`/${ymd}`} class="block w-full h-full">
               <Image
                 src={getPhotoFiles()[photo.filename]()}
                 format="jpg"
                 alt=""
-                width={200}
-                height={200}
-                class="aspect-square object-cover"
+                class="w-full h-full aspect-square object-cover"
               />
             </a>
           </Square>
