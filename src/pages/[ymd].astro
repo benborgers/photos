@@ -38,33 +38,37 @@ const title = format(parseISO(ymd), "PPPP");
       <p class="font-bold">{title}</p>
 
       <nav class="space-x-1">
-        {previousYmd ? (
-          <a
-            href={`/${previousYmd}`}
-            data-previous
-            class="inline-block font-sans font-bold text-blue-800"
-          >
-            &larr;
-          </a>
-        ) : (
-          <span class="inline-block font-sans font-bold text-gray-300">
-            &larr;
-          </span>
-        )}
+        {
+          previousYmd ? (
+            <a
+              href={`/${previousYmd}`}
+              data-previous
+              class="inline-block font-sans font-bold text-blue-800"
+            >
+              &larr;
+            </a>
+          ) : (
+            <span class="inline-block font-sans font-bold text-gray-300">
+              &larr;
+            </span>
+          )
+        }
 
-        {nextYmd ? (
-          <a
-            href={`/${nextYmd}`}
-            data-next
-            class="inline-block font-sans font-bold text-blue-800"
-          >
-            &rarr;
-          </a>
-        ) : (
-          <span class="inline-block font-sans font-bold text-gray-300">
-            &rarr;
-          </span>
-        )}
+        {
+          nextYmd ? (
+            <a
+              href={`/${nextYmd}`}
+              data-next
+              class="inline-block font-sans font-bold text-blue-800"
+            >
+              &rarr;
+            </a>
+          ) : (
+            <span class="inline-block font-sans font-bold text-gray-300">
+              &rarr;
+            </span>
+          )
+        }
       </nav>
     </div>
 
@@ -93,7 +97,9 @@ const title = format(parseISO(ymd), "PPPP");
 
     {
       caption && (
-        <p class="mt-4 text-gray-500 italic whitespace-pre-line">{caption}</p>
+        <p class="mt-4 text-gray-500 italic whitespace-pre-line [font-synthesis:none]">
+          {caption}
+        </p>
       )
     }
   </div>
@@ -101,14 +107,18 @@ const title = format(parseISO(ymd), "PPPP");
   <script>
     window.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft" && !event.metaKey) {
-        const previousLink = document.querySelector("[data-previous]") as HTMLAnchorElement;
+        const previousLink = document.querySelector(
+          "[data-previous]"
+        ) as HTMLAnchorElement;
         if (previousLink) {
           previousLink.click();
         }
       }
 
       if (event.key === "ArrowRight" && !event.metaKey) {
-        const nextLink = document.querySelector("[data-next]") as HTMLAnchorElement;
+        const nextLink = document.querySelector(
+          "[data-next]"
+        ) as HTMLAnchorElement;
         if (nextLink) {
           nextLink.click();
         }
