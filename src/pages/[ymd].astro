@@ -5,6 +5,7 @@ import { format, parseISO } from "date-fns";
 import Layout from "../components/layout.astro";
 import { getPhotoFiles, getPhotos } from "../lib/photos";
 import { getCaption } from "../lib/captions";
+import { getImage } from "astro:assets";
 
 export const getStaticPaths = (() => {
   const photos = getPhotos();
@@ -30,9 +31,15 @@ const previousYmd = ymds[ymds.indexOf(ymd) - 1];
 const nextYmd = ymds[ymds.indexOf(ymd) + 1];
 
 const title = format(parseISO(ymd), "PPPP");
+
+const isVideo = extension === "mov";
+const image = getPhotoFiles()[filename]();
+const { src } = isVideo
+  ? { src: undefined }
+  : await getImage({ src: image, format: "jpg" });
 ---
 
-<Layout title={title}>
+<Layout title={title} ogImage={src}>
   <div>
     <div class="flex items-center justify-between">
       <p class="font-bold">{title}</p>
@@ -75,7 +82,7 @@ const title = format(parseISO(ymd), "PPPP");
     <p class="text-gray-400">#{ymds.indexOf(ymd) + 1}</p>
 
     {
-      extension === "mov" ? (
+      isVideo ? (
         <div class="mt-4">
           <video
             src={`/photos/${ymd}.${extension}`}
@@ -85,13 +92,7 @@ const title = format(parseISO(ymd), "PPPP");
           />
         </div>
       ) : (
-        <Image
-          src={getPhotoFiles()[filename]()}
-          format="jpg"
-          alt=""
-          width={2000}
-          class="mt-4"
-        />
+        <Image src={image} format="jpg" alt="" width={2000} class="mt-4" />
       )
     }
 
