@@ -126,7 +126,8 @@ const { src } = isVideo
       }
 
       if (event.key === "Escape" && !event.metaKey) {
-        window.location.href = "/";
+        // setTimeout works around a Chrome bug where synchronous navigation in keydown handlers is unreliable
+        setTimeout(() => window.location.href = "/", 0);
       }
     });
   </script>
