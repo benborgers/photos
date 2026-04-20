@@ -1,5 +1,4 @@
 ---
-import { Image, Picture } from "astro:assets";
 import type { GetStaticPaths } from "astro";
 import { format, parseISO } from "date-fns";
 import Layout from "../components/layout.astro";
@@ -34,12 +33,12 @@ const title = format(parseISO(ymd), "PPPP");
 
 const isVideo = extension === "mov";
 const image = getPhotoFiles()[filename]();
-const { src } = isVideo
-  ? { src: undefined }
-  : await getImage({ src: image, format: "jpg" });
+const optimizedImage = isVideo
+  ? undefined
+  : await getImage({ src: image, format: "jpg", width: 1200, alt: "" });
 ---
 
-<Layout title={title} ogImage={src}>
+<Layout title={title} ogImage={optimizedImage?.src}>
   <div>
     <div class="flex items-center justify-between">
       <p class="font-bold">{title}</p>
@@ -92,7 +91,7 @@ const { src } = isVideo
           />
         </div>
       ) : (
-        <Image src={image} format="jpg" alt="" width={2000} class="mt-4" />
+        <img src={optimizedImage.src} {...optimizedImage.attributes} class="mt-4" />
       )
     }
 
