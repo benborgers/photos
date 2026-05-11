@@ -35,7 +35,13 @@ const isVideo = extension === "mov";
 const image = getPhotoFiles()[filename]();
 const optimizedImage = isVideo
   ? undefined
-  : await getImage({ src: image, format: "jpg", width: 1200, alt: "" });
+  : await getImage({
+      src: image,
+      format: "jpg",
+      width: 1200,
+      alt: "",
+      loading: "eager",
+    });
 ---
 
 <Layout title={title} ogImage={optimizedImage?.src}>
@@ -91,7 +97,11 @@ const optimizedImage = isVideo
           />
         </div>
       ) : (
-        <img src={optimizedImage.src} {...optimizedImage.attributes} class="mt-4" />
+        <img
+          src={optimizedImage.src}
+          {...optimizedImage.attributes}
+          class="mt-4"
+        />
       )
     }
 
@@ -108,7 +118,7 @@ const optimizedImage = isVideo
     window.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft" && !event.metaKey) {
         const previousLink = document.querySelector(
-          "[data-previous]"
+          "[data-previous]",
         ) as HTMLAnchorElement;
         if (previousLink) {
           previousLink.click();
@@ -117,7 +127,7 @@ const optimizedImage = isVideo
 
       if (event.key === "ArrowRight" && !event.metaKey) {
         const nextLink = document.querySelector(
-          "[data-next]"
+          "[data-next]",
         ) as HTMLAnchorElement;
         if (nextLink) {
           nextLink.click();
@@ -126,7 +136,7 @@ const optimizedImage = isVideo
 
       if (event.key === "Escape" && !event.metaKey) {
         // setTimeout works around a Chrome bug where synchronous navigation in keydown handlers is unreliable
-        setTimeout(() => window.location.href = "/", 0);
+        setTimeout(() => (window.location.href = "/"), 0);
       }
     });
   </script>
