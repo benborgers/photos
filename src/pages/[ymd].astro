@@ -115,6 +115,8 @@ const optimizedImage = isVideo
   </div>
 
   <script>
+    import { navigate } from "astro:transitions/client";
+
     window.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft" && !event.metaKey) {
         const previousLink = document.querySelector(
@@ -136,7 +138,7 @@ const optimizedImage = isVideo
 
       if (event.key === "Escape" && !event.metaKey) {
         // setTimeout works around a Chrome bug where synchronous navigation in keydown handlers is unreliable
-        setTimeout(() => (window.location.href = "/"), 0);
+        setTimeout(() => navigate("/"), 0);
       }
     });
   </script>

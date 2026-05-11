@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @config "../../tailwind.config.mjs";
+
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation: none;
+}

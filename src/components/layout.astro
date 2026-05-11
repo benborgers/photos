@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -27,6 +28,7 @@ const { title, ogImage = undefined } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700"
       rel="stylesheet"
     />
+    <ClientRouter fallback="swap" />
   </head>
   <body class="antialiased font-mono bg-gray-200 text-gray-900">
     <div class="p-4 pb-24 sm:pt-12">
