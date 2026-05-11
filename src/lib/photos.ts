@@ -1,5 +1,17 @@
+import { getImage } from "astro:assets";
+
 export function getPhotoFiles(): Record<string, any> {
   return import.meta.glob("/src/photos/*.{jpg,png,webp,mov}");
+}
+
+export async function getPhotoPageImage(filename: string) {
+  return getImage({
+    src: getPhotoFiles()[filename](),
+    format: "jpg",
+    width: 1200,
+    alt: "",
+    loading: "eager",
+  });
 }
 
 export function getPhotos(): {

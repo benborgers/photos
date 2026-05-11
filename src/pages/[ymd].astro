@@ -2,9 +2,8 @@
 import type { GetStaticPaths } from "astro";
 import { format, parseISO } from "date-fns";
 import Layout from "../components/layout.astro";
-import { getPhotoFiles, getPhotos } from "../lib/photos";
+import { getPhotoPageImage, getPhotos } from "../lib/photos";
 import { getCaption } from "../lib/captions";
-import { getImage } from "astro:assets";
 
 export const getStaticPaths = (() => {
   const photos = getPhotos();
@@ -32,16 +31,9 @@ const nextYmd = ymds[ymds.indexOf(ymd) + 1];
 const title = format(parseISO(ymd), "PPPP");
 
 const isVideo = extension === "mov";
-const image = getPhotoFiles()[filename]();
 const optimizedImage = isVideo
   ? undefined
-  : await getImage({
-      src: image,
-      format: "jpg",
-      width: 1200,
-      alt: "",
-      loading: "eager",
-    });
+  : await getPhotoPageImage(filename);
 ---
 
 <Layout title={title} ogImage={optimizedImage?.src}>

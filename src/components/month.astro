@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { format, getDaysInMonth } from "date-fns";
-import { getPhotoFiles, getPhotos } from "../lib/photos";
+import { getPhotoFiles, getPhotoPageImage, getPhotos } from "../lib/photos";
 import Square from "./square.astro";
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
 const { month, year } = Astro.props;
 
 const photos = getPhotos();
+const photoFiles = getPhotoFiles();
 
 const date = new Date(year, month - 1);
 
@@ -52,11 +53,14 @@ const title = format(date, "MMMM yyyy");
           );
         }
 
+        const image = photoFiles[photo.filename]();
+        const photoPageImage = await getPhotoPageImage(photo.filename);
+
         return (
           <Square ymd={ymd}>
-            <a href={`/${ymd}`}>
+            <a href={`/${ymd}`} data-prefetch-photo-src={photoPageImage.src}>
               <Image
-                src={getPhotoFiles()[photo.filename]()}
+                src={image}
                 format="jpg"
                 alt=""
                 width={200}
@@ -71,3 +75,39 @@ const title = format(date, "MMMM yyyy");
     {Array.from({ length: fillDaysAfter }, () => <Square />)}
   </div>
 </div>
+
+<script>
+  const prefetchedPhotoSrcs = new Set<string>();
+
+  function prefetchPhoto(src: string) {
+    if (prefetchedPhotoSrcs.has(src)) {
+      return;
+    }
+
+    prefetchedPhotoSrcs.add(src);
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = src;
+  }
+
+  function prefetchLinkedPhoto(event: Event) {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const link = target.closest<HTMLAnchorElement>("a[data-prefetch-photo-src]");
+    const src = link?.dataset.prefetchPhotoSrc;
+
+    if (src) {
+      prefetchPhoto(src);
+    }
+  }
+
+  document.addEventListener("pointerenter", prefetchLinkedPhoto, {
+    capture: true,
+  });
+  document.addEventListener("focusin", prefetchLinkedPhoto);
+</script>
