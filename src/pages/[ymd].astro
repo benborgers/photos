@@ -36,10 +36,16 @@ const optimizedImage = isVideo
   : await getPhotoPageImage(filename);
 ---
 
-<Layout title={title} ogImage={optimizedImage?.src}>
+<Layout title={title} ogImage={optimizedImage?.src} hideHeader>
   <div>
     <div class="flex items-center justify-between">
-      <p class="font-bold">{title}</p>
+      <p class="font-bold">
+        <a
+          href="/"
+          class="hidden sm:inline relative top-[1px] mr-2 font-sans font-bold text-blue-800"
+          >&uarr;</a
+        >{title}
+      </p>
 
       <nav class="space-x-1">
         {
@@ -79,8 +85,16 @@ const optimizedImage = isVideo
     <p class="text-gray-400">#{ymds.indexOf(ymd) + 1}</p>
 
     {
+      caption && (
+        <p class="mt-4 text-gray-500 italic whitespace-pre-line [font-synthesis:none]">
+          {caption}
+        </p>
+      )
+    }
+
+    {
       isVideo ? (
-        <div class="mt-4">
+        <div class={caption ? "mt-2" : "mt-4"}>
           <video
             src={`/photos/${ymd}.${extension}`}
             controls
@@ -92,16 +106,8 @@ const optimizedImage = isVideo
         <img
           src={optimizedImage.src}
           {...optimizedImage.attributes}
-          class="mt-4"
+          class={caption ? "mt-2" : "mt-4"}
         />
-      )
-    }
-
-    {
-      caption && (
-        <p class="mt-4 text-gray-500 italic whitespace-pre-line [font-synthesis:none]">
-          {caption}
-        </p>
       )
     }
   </div>

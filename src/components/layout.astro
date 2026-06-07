@@ -5,9 +5,10 @@ import { ClientRouter } from "astro:transitions";
 interface Props {
   title?: string;
   ogImage?: string;
+  hideHeader?: boolean;
 }
 
-const { title, ogImage = undefined } = Astro.props;
+const { title, ogImage = undefined, hideHeader = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -33,7 +34,7 @@ const { title, ogImage = undefined } = Astro.props;
   <body class="antialiased font-mono bg-gray-200 text-gray-900">
     <div class="p-4 pb-24 sm:pt-12">
       <div class="max-w-xl mx-auto">
-        <header>
+        <header class={hideHeader ? "sm:hidden" : undefined}>
           <p class="font-bold italic">
             <a href="/" class="underline text-blue-800"> Photo of the Day </a>
           </p>
@@ -49,7 +50,7 @@ const { title, ogImage = undefined } = Astro.props;
           </p>
         </header>
 
-        <main class="mt-12">
+        <main class={hideHeader ? "mt-12 sm:mt-0" : "mt-12"}>
           <slot />
         </main>
       </div>
