@@ -38,7 +38,7 @@ const optimizedImage = isVideo
 
 <Layout title={title} ogImage={optimizedImage?.src} hideHeader>
   <div>
-    <div class="flex items-center justify-between">
+    <div class="flex items-start justify-between">
       <p class="font-bold italic">
         <a
           href="/"
@@ -47,7 +47,7 @@ const optimizedImage = isVideo
         >{title}
       </p>
 
-      <nav class="space-x-1">
+      <nav class="space-x-1 -translate-y-0.5">
         {
           previousYmd ? (
             <a
