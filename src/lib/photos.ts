@@ -5,10 +5,20 @@ export function getPhotoFiles(): Record<string, any> {
 }
 
 export async function getPhotoPageImage(filename: string) {
+  const { default: src } = await getPhotoFiles()[filename]();
+
+  // Clamp the SHORTER side to 1200 (instead of always the width) so that
+  // wide / panoramic photos keep their resolution instead of being shrunk
+  // down by a fixed width. Portrait photos are unaffected (width is their
+  // shorter side). Math.min guards against upscaling small sources.
+  const target = Math.min(1200, src.width, src.height);
+  const dimension =
+    src.width >= src.height ? { height: target } : { width: target };
+
   return getImage({
-    src: getPhotoFiles()[filename](),
+    src,
     format: "jpg",
-    width: 1200,
+    ...dimension,
     alt: "",
     loading: "eager",
   });
